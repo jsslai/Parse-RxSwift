@@ -169,6 +169,7 @@
 				TargetAttributes = {
 					46DE574C1C476CF1003042C1 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -345,6 +346,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "bluelinelabs.Parse-RxSwift";
 				PRODUCT_NAME = Parse_RxSwift;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -365,6 +367,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "bluelinelabs.Parse-RxSwift";
 				PRODUCT_NAME = Parse_RxSwift;
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

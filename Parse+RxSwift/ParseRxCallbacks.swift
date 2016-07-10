@@ -11,35 +11,35 @@ import Parse
 
 class ParseRxCallbacks {
 
-    static func rx_parseCallback<T>(observer: AnyObserver<T>) -> (object: T, error: NSError?) -> Void {
+    static func rx_parseCallback<T>(_ observer: AnyObserver<T>) -> (object: T, error: NSError?) -> Void {
         return { (object: T, error: NSError?) in
             if error == nil {
-                observer.on(.Next(object))
-                observer.on(.Completed)
+                observer.on(.next(object))
+                observer.on(.completed)
             } else {
-                observer.on(.Error(error!))
+                observer.on(.error(error!))
             }
         }
     }
     
-    static func rx_parseUnwrappedOptionalCallback<T>(observer: AnyObserver<T>) -> (object: T?, error: NSError?) -> Void {
+    static func rx_parseUnwrappedOptionalCallback<T>(_ observer: AnyObserver<T>) -> (object: T?, error: NSError?) -> Void {
         return { (object: T?, error: NSError?) in
             if error == nil {
-                observer.on(.Next(object!))
-                observer.on(.Completed)
+                observer.on(.next(object!))
+                observer.on(.completed)
             } else {
-                observer.on(.Error(error!))
+                observer.on(.error(error!))
             }
         }
     }
     
-    static func rx_parseOptionalCallback<T>(observer: AnyObserver<T?>) -> (object: T?, error: NSError?) -> Void {
+    static func rx_parseOptionalCallback<T>(_ observer: AnyObserver<T?>) -> (object: T?, error: NSError?) -> Void {
         return { (object: T?, error: NSError?) in
             if error == nil {
-                observer.on(.Next(object))
-                observer.on(.Completed)
+                observer.on(.next(object))
+                observer.on(.completed)
             } else {
-                observer.on(.Error(error!))
+                observer.on(.error(error!))
             }
         }
     }

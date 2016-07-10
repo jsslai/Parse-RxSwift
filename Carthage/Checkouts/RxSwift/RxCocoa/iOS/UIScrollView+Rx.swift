@@ -31,39 +31,43 @@ extension UIScrollView {
     For more information take a look at `DelegateProxyType` protocol documentation.
     */
     public var rx_delegate: DelegateProxy {
-        return proxyForObject(RxScrollViewDelegateProxy.self, self)
+        return RxScrollViewDelegateProxy.proxyForObject(self)
     }
     
     /**
     Reactive wrapper for `contentOffset`.
     */
     public var rx_contentOffset: ControlProperty<CGPoint> {
-        let proxy = proxyForObject(RxScrollViewDelegateProxy.self, self)
-        
-        return ControlProperty(values: proxy.contentOffsetSubject, valueSink: AnyObserver { [weak self] event in
-            switch event {
-            case .Next(let value):
-                self?.contentOffset = value
-            case .Error(let error):
-                bindingErrorToInterface(error)
-            case .Completed:
-                break
-            }
-        })
+        let proxy = RxScrollViewDelegateProxy.proxyForObject(self)
+
+        let bindingObserver = UIBindingObserver(UIElement: self) { scrollView, contentOffset in
+            scrollView.contentOffset = contentOffset
+        }
+
+        return ControlProperty(values: proxy.contentOffsetSubject, valueSink: bindingObserver)
     }
-    
+
+    /**
+    Bindable sink for `scrollEnabled` property.
+    */
+    public var rx_scrollEnabled: AnyObserver<Bool> {
+        return UIBindingObserver(UIElement: self) { scrollView, scrollEnabled in
+            scrollView.isScrollEnabled = scrollEnabled
+        }.asObserver()
+    }
+
     /**
     Installs delegate as forwarding delegate on `rx_delegate`.
+    Delegate won't be retained.
     
     It enables using normal delegate mechanism with reactive delegate mechanism.
     
     - parameter delegate: Delegate object.
     - returns: Disposable object that can be used to unbind the delegate.
     */
-    public func rx_setDelegate(delegate: UIScrollViewDelegate)
+    public func rx_setDelegate(_ delegate: UIScrollViewDelegate)
         -> Disposable {
-        let proxy = proxyForObject(RxScrollViewDelegateProxy.self, self)
-        return installDelegate(proxy, delegate: delegate, retainDelegate: false, onProxyForObject: self)
+        return RxScrollViewDelegateProxy.installForwardDelegate(delegate, retainDelegate: false, onProxyForObject: self)
     }
 }
 

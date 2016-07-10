@@ -22,7 +22,7 @@ extension BlockingObservable {
     public func toArray() throws -> [E] {
         var elements: [E] = Array<E>()
 
-        var error: ErrorType?
+        var error: ErrorProtocol?
 
         let lock = RunLoopLock()
 
@@ -30,13 +30,18 @@ extension BlockingObservable {
 
         lock.dispatch {
             d.disposable = self.source.subscribe { e in
+                if d.disposed {
+                    return
+                }
                 switch e {
-                case .Next(let element):
+                case .next(let element):
                     elements.append(element)
-                case .Error(let e):
+                case .error(let e):
                     error = e
+                    d.dispose()
                     lock.stop()
-                case .Completed:
+                case .completed:
+                    d.dispose()
                     lock.stop()
                 }
             }
@@ -65,7 +70,7 @@ extension BlockingObservable {
     public func first() throws -> E? {
         var element: E?
 
-        var error: ErrorType?
+        var error: ErrorProtocol?
 
         let d = SingleAssignmentDisposable()
 
@@ -73,18 +78,23 @@ extension BlockingObservable {
 
         lock.dispatch {
             d.disposable = self.source.subscribe { e in
+                if d.disposed {
+                    return
+                }
+
                 switch e {
-                case .Next(let e):
+                case .next(let e):
                     if element == nil {
                         element = e
                     }
                     break
-                case .Error(let e):
+                case .error(let e):
                     error = e
                 default:
                     break
                 }
 
+                d.dispose()
                 lock.stop()
             }
         }
@@ -112,7 +122,7 @@ extension BlockingObservable {
     public func last() throws -> E? {
         var element: E?
 
-        var error: ErrorType?
+        var error: ErrorProtocol?
 
         let d = SingleAssignmentDisposable()
 
@@ -120,16 +130,20 @@ extension BlockingObservable {
 
         lock.dispatch {
             d.disposable = self.source.subscribe { e in
+                if d.disposed {
+                    return
+                }
                 switch e {
-                case .Next(let e):
+                case .next(let e):
                     element = e
                     return
-                case .Error(let e):
+                case .error(let e):
                     error = e
                 default:
                     break
                 }
 
+                d.dispose()
                 lock.stop()
             }
         }
@@ -166,10 +180,10 @@ extension BlockingObservable {
      - parameter predicate: A function to test each source element for a condition.
      - returns: Returns the only element of an sequence that satisfies the condition in the predicate, and reports an error if there is not exactly one element in the sequence.
      */
-    public func single(predicate: (E) throws -> Bool) throws -> E? {
+    public func single(_ predicate: (E) throws -> Bool) throws -> E? {
         var element: E?
         
-        var error: ErrorType?
+        var error: ErrorProtocol?
         
         let d = SingleAssignmentDisposable()
         
@@ -181,7 +195,7 @@ extension BlockingObservable {
                     return
                 }
                 switch e {
-                case .Next(let e):
+                case .next(let e):
                     do {
                         if try !predicate(e) {
                             return
@@ -189,7 +203,7 @@ extension BlockingObservable {
                         if element == nil {
                             element = e
                         } else {
-                            throw RxError.MoreThanOneElement
+                            throw RxError.moreThanOneElement
                         }
                     } catch (let err) {
                         error = err
@@ -197,14 +211,15 @@ extension BlockingObservable {
                         lock.stop()
                     }
                     return
-                case .Error(let e):
+                case .error(let e):
                     error = e
-                case .Completed:
+                case .completed:
                     if element == nil {
-                        error = RxError.NoElements
+                        error = RxError.noElements
                     }
                 }
 
+                d.dispose()
                 lock.stop()
             }
         }

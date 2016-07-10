@@ -9,39 +9,64 @@
 import RxSwift
 import Parse
 
-extension PFQuery {
-    
-    public func rx_findObjects<T: PFObject>() -> Observable<[T]?> {
-        return createWithParseCallback({ observer in
-            self.findObjectsInBackgroundWithBlock(ParseRxCallbacks.rx_parseOptionalCallback(observer))
-        })
-        .map({ objects in
-            return objects as! [T]?
-        })
+// Swift compiler crash
+/*extension PFQuery {
+    public func rx_findObjects() -> Observable<[PFObject]?> {
+        let typeEreasedSelf = self as! PFQuery<PFObject>
+        
+        return createWithParseCallback { observer in
+            typeEreasedSelf.findObjectsInBackground(block: ParseRxCallbacks.rx_parseOptionalCallback(observer))
+        }
     }
     
-    public func rx_getObject<T: PFObject>(objectId: String) -> Observable<T?> {
-        return createWithParseCallback({ observer in
-            self.getObjectInBackgroundWithId(objectId, block: ParseRxCallbacks.rx_parseOptionalCallback(observer))
-        })
-        .map({ object in
-            return object as! T?
-        })
+    public func rx_getObject(_ objectId: String) -> Observable<PFObject?> {
+        let typeEreasedSelf = self as! PFQuery<PFObject>
+        
+        return createWithParseCallback { observer in
+            typeEreasedSelf.getObjectInBackground(withId: objectId, block: ParseRxCallbacks.rx_parseOptionalCallback(observer))
+        }
     }
     
-    public func rx_getFirstObject<T: PFObject>() -> Observable<T?> {
-        return createWithParseCallback({ observer in
-            self.getFirstObjectInBackgroundWithBlock(ParseRxCallbacks.rx_parseOptionalCallback(observer))
-        })
-        .map({ object in
-            return object as! T?
-        })
+    public func rx_getFirstObject() -> Observable<PFObject?> {
+        let typeEreasedSelf = self as! PFQuery<PFObject>
+        
+        return createWithParseCallback { observer in
+            typeEreasedSelf.getFirstObjectInBackground(block: ParseRxCallbacks.rx_parseOptionalCallback(observer))
+        }
     }
     
     public func rx_countObjects() -> Observable<Int32> {
-        return createWithParseCallback({ observer in
-            self.countObjectsInBackgroundWithBlock(ParseRxCallbacks.rx_parseCallback(observer))
-        })
+        let typeEreasedSelf = self as! PFQuery<PFObject>
+        
+        return createWithParseCallback { observer in
+            typeEreasedSelf.countObjectsInBackground(block: ParseRxCallbacks.rx_parseCallback(observer))
+        }
     }
     
+}*/
+
+public class MyPFQuery: PFQuery<PFObject> {
+    public func rx_findObjects() -> Observable<[PFObject]?> {
+        return createWithParseCallback { observer in
+            self.findObjectsInBackground(block: ParseRxCallbacks.rx_parseOptionalCallback(observer))
+        }
+    }
+    
+    public func rx_getObject(_ objectId: String) -> Observable<PFObject?> {
+        return createWithParseCallback { observer in
+            self.getObjectInBackground(withId: objectId, block: ParseRxCallbacks.rx_parseOptionalCallback(observer))
+        }
+    }
+    
+    public func rx_getFirstObject() -> Observable<PFObject?> {
+        return createWithParseCallback { observer in
+            self.getFirstObjectInBackground(block: ParseRxCallbacks.rx_parseOptionalCallback(observer))
+        }
+    }
+    
+    public func rx_countObjects() -> Observable<Int32> {
+        return createWithParseCallback { observer in
+            self.countObjectsInBackground(block: ParseRxCallbacks.rx_parseCallback(observer))
+        }
+    }
 }

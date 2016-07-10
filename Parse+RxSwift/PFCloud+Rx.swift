@@ -11,9 +11,9 @@ import Parse
 
 extension PFCloud {
     
-    public static func rx_callFunction<T>(function: String, withParameters: Dictionary<NSObject, AnyObject>?) -> Observable<T?> {
+    public static func rx_callFunction<T>(_ function: String, withParameters: Dictionary<NSObject, AnyObject>?) -> Observable<T?> {
         return createWithParseCallback({ observer in
-            self.callFunctionInBackground(function, withParameters: withParameters, block: ParseRxCallbacks.rx_parseOptionalCallback(observer))
+            self.callFunction(inBackground: function, withParameters: withParameters, block: ParseRxCallbacks.rx_parseOptionalCallback(observer))
         })
         .map( { result in
             return result as! T?

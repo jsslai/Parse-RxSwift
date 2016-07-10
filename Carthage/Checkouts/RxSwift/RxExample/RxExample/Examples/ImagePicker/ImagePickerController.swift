@@ -24,12 +24,12 @@ class ImagePickerController: ViewController {
         super.viewDidLoad()
 
 
-        cameraButton.enabled = UIImagePickerController.isSourceTypeAvailable(.Camera)
+        cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
 
         cameraButton.rx_tap
             .flatMapLatest { [weak self] _ in
                 return UIImagePickerController.rx_createWithParent(self) { picker in
-                    picker.sourceType = .Camera
+                    picker.sourceType = .camera
                     picker.allowsEditing = false
                 }
                 .flatMap { $0.rx_didFinishPickingMediaWithInfo }
@@ -44,7 +44,7 @@ class ImagePickerController: ViewController {
         galleryButton.rx_tap
             .flatMapLatest { [weak self] _ in
                 return UIImagePickerController.rx_createWithParent(self) { picker in
-                    picker.sourceType = .PhotoLibrary
+                    picker.sourceType = .photoLibrary
                     picker.allowsEditing = false
                 }
                 .flatMap {
@@ -61,14 +61,14 @@ class ImagePickerController: ViewController {
         cropButton.rx_tap
             .flatMapLatest { [weak self] _ in
                 return UIImagePickerController.rx_createWithParent(self) { picker in
-                    picker.sourceType = .PhotoLibrary
+                    picker.sourceType = .photoLibrary
                     picker.allowsEditing = true
                 }
                 .flatMap { $0.rx_didFinishPickingMediaWithInfo }
                 .take(1)
             }
             .map { info in
-                return info[UIImagePickerControllerOriginalImage] as? UIImage
+                return info[UIImagePickerControllerEditedImage] as? UIImage
             }
             .bindTo(imageView.rx_image)
             .addDisposableTo(disposeBag)

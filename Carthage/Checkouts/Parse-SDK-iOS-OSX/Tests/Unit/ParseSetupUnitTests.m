@@ -46,7 +46,7 @@
     PFAssertThrowsInconsistencyException([Parse enableLocalDatastore]);
 }
 
-- (void)testInitializeWithNilApplicationIdNilClientKeyShouldThrowException {
+- (void)testInitializeWithNilApplicationIdShouldThrowException {
     NSString *yolo = nil;
     PFAssertThrowsInvalidArgumentException([Parse setApplicationId:yolo clientKey:yolo]);
     PFAssertThrowsInvalidArgumentException([Parse setApplicationId:yolo clientKey:@"a"]);

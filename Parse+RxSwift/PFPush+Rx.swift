@@ -13,49 +13,49 @@ extension PFPush {
     
     public func rx_sendPush() -> Observable<Bool> {
         return createWithParseCallback({ observer in
-            self.sendPushInBackgroundWithBlock(ParseRxCallbacks.rx_parseCallback(observer))
+            self.sendInBackground(block: ParseRxCallbacks.rx_parseCallback(observer))
         })
     }
     
-    public static func rx_sendPushMessageToChannel(channel: String, withMessage: String) -> Observable<Bool> {
+    public static func rx_sendPushMessageToChannel(_ channel: String, withMessage: String) -> Observable<Bool> {
         return createWithParseCallback({ observer in
-            self.sendPushMessageToChannelInBackground(channel, withMessage: withMessage, block: ParseRxCallbacks.rx_parseCallback(observer))
+            self.sendMessageToChannel(inBackground: channel, withMessage: withMessage, block: ParseRxCallbacks.rx_parseCallback(observer))
         })
     }
     
-    public static func rx_sendPushMessageToQuery(query: PFQuery, withMessage: String) -> Observable<Bool> {
+    public static func rx_sendPushMessageToQuery(_ query: PFQuery<PFInstallation>, withMessage: String) -> Observable<Bool> {
         return createWithParseCallback({ observer in
-            self.sendPushMessageToQueryInBackground(query, withMessage: withMessage, block: ParseRxCallbacks.rx_parseCallback(observer))
+            self.sendMessageToQuery(inBackground: query, withMessage: withMessage, block: ParseRxCallbacks.rx_parseCallback(observer))
         })
     }
     
-    public static func rx_sendPushDataToChannel(channel: String, withData: Dictionary<NSObject, AnyObject>) -> Observable<Bool> {
+    public static func rx_sendPushDataToChannel(_ channel: String, withData: Dictionary<NSObject, AnyObject>) -> Observable<Bool> {
         return createWithParseCallback({ observer in
-            self.sendPushDataToChannelInBackground(channel, withData: withData, block: ParseRxCallbacks.rx_parseCallback(observer))
+            self.sendDataToChannel(inBackground: channel, withData: withData, block: ParseRxCallbacks.rx_parseCallback(observer))
         })
     }
     
-    public static func rx_sendPushDataToQuery(query: PFQuery, withData: Dictionary<NSObject, AnyObject>) -> Observable<Bool> {
+    public static func rx_sendPushDataToQuery(_ query: PFQuery<PFInstallation>, withData: Dictionary<NSObject, AnyObject>) -> Observable<Bool> {
         return createWithParseCallback({ observer in
-            self.sendPushDataToQueryInBackground(query, withData: withData, block: ParseRxCallbacks.rx_parseCallback(observer))
+            self.sendDataToQuery(inBackground: query, withData: withData, block: ParseRxCallbacks.rx_parseCallback(observer))
         })
     }
     
-    public static func rx_subscribeToChannel(channel: String) -> Observable<Bool> {
+    public static func rx_subscribeToChannel(_ channel: String) -> Observable<Bool> {
         return createWithParseCallback({ observer in
-            self.subscribeToChannelInBackground(channel, block: ParseRxCallbacks.rx_parseCallback(observer))
+            self.subscribeToChannel(inBackground: channel, block: ParseRxCallbacks.rx_parseCallback(observer))
         })
     }
     
-    public static func rx_unsubscribeFromChannel(channel: String) -> Observable<Bool> {
+    public static func rx_unsubscribeFromChannel(_ channel: String) -> Observable<Bool> {
         return createWithParseCallback({ observer in
-            self.unsubscribeFromChannelInBackground(channel, block: ParseRxCallbacks.rx_parseCallback(observer))
+            self.unsubscribeFromChannel(inBackground: channel, block: ParseRxCallbacks.rx_parseCallback(observer))
         })
     }
     
     public static func rx_getSubscribedChannels() -> Observable<Set<NSObject>> {
         return createWithParseCallback({ observer in
-            self.getSubscribedChannelsInBackgroundWithBlock(ParseRxCallbacks.rx_parseUnwrappedOptionalCallback(observer))
+            self.getSubscribedChannelsInBackground(ParseRxCallbacks.rx_parseUnwrappedOptionalCallback(observer))
         })
     }
 }

@@ -13,7 +13,7 @@ extension PFGeoPoint {
     
     public static func rx_geoPointForCurrentLocation() -> Observable<PFGeoPoint> {
         return createWithParseCallback({ observer in
-            self.geoPointForCurrentLocationInBackground(ParseRxCallbacks.rx_parseUnwrappedOptionalCallback(observer))
+            self.geoPointForCurrentLocation(inBackground: ParseRxCallbacks.rx_parseUnwrappedOptionalCallback(observer))
         })
     }
     

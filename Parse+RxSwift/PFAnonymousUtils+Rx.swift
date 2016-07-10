@@ -11,9 +11,9 @@ import Parse
 
 extension PFAnonymousUtils {
     
-    public static func rx_login(username: String, password: String) -> Observable<PFUser> {
+    public static func rx_login(_ username: String, password: String) -> Observable<PFUser> {
         return createWithParseCallback({ observer in
-            self.logInWithBlock(ParseRxCallbacks.rx_parseUnwrappedOptionalCallback(observer))
+            self.logIn(block: ParseRxCallbacks.rx_parseUnwrappedOptionalCallback(observer))
         })
     }
     

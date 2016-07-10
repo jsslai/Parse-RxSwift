@@ -19,25 +19,21 @@ class MySubject<Element where Element : Hashable> : SubjectType, ObserverType {
     var _disposed: Bool = false
     
     var subscribeCount: Int {
-        get {
-            return _subscribeCount
-        }
+        return _subscribeCount
     }
     
     var diposed: Bool {
-        get {
-            return _disposed
-        }
+        return _disposed
     }
     
-    func disposeOn(value: Element, disposable: Disposable) {
+    func disposeOn(_ value: Element, disposable: Disposable) {
         _disposeOn[value] = disposable
     }
     
-    func on(event: Event<E>) {
+    func on(_ event: Event<E>) {
         _observer.on(event)
         switch event {
-        case .Next(let value):
+        case .next(let value):
             if let disposable = _disposeOn[value] {
                 disposable.dispose()
             }
@@ -45,7 +41,7 @@ class MySubject<Element where Element : Hashable> : SubjectType, ObserverType {
         }
     }
     
-    func subscribe<O : ObserverType where O.E == E>(observer: O) -> Disposable {
+    func subscribe<O : ObserverType where O.E == E>(_ observer: O) -> Disposable {
         _subscribeCount += 1
         _observer = AnyObserver(observer)
         

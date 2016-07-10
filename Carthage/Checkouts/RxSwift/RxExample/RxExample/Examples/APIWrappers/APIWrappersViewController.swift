@@ -58,7 +58,7 @@ class APIWrappersViewController: ViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        datePicker.date = NSDate(timeIntervalSince1970: 0)
+        datePicker.date = Date(timeIntervalSince1970: 0)
 
         // MARK: UIBarButtonItem
 
@@ -70,7 +70,11 @@ class APIWrappersViewController: ViewController {
 
         // MARK: UISegmentedControl
 
-        segmentedControl.rx_value
+        // also test two way binding
+        let segmentedValue = Variable(0)
+        _ = segmentedControl.rx_value <-> segmentedValue
+
+        segmentedValue.asObservable()
             .subscribeNext { [weak self] x in
                 self?.debug("UISegmentedControl value \(x)")
             }
@@ -79,7 +83,11 @@ class APIWrappersViewController: ViewController {
 
         // MARK: UISwitch
 
-        switcher.rx_value
+        // also test two way binding
+        let switchValue = Variable(true)
+        _ = switcher.rx_value <-> switchValue
+
+        switchValue.asObservable()
             .subscribeNext { [weak self] x in
                 self?.debug("UISwitch value \(x)")
             }
@@ -103,7 +111,11 @@ class APIWrappersViewController: ViewController {
 
         // MARK: UISlider
 
-        slider.rx_value
+        // also test two way binding
+        let sliderValue = Variable<Float>(1.0)
+        _ = slider.rx_value <-> sliderValue
+
+        sliderValue.asObservable()
             .subscribeNext { [weak self] x in
                 self?.debug("UISlider value \(x)")
             }
@@ -112,7 +124,12 @@ class APIWrappersViewController: ViewController {
 
         // MARK: UIDatePicker
 
-        datePicker.rx_date
+        // also test two way binding
+        let dateValue = Variable(Date(timeIntervalSince1970: 0))
+        _ = datePicker.rx_date <-> dateValue
+
+
+        dateValue.asObservable()
             .subscribeNext { [weak self] x in
                 self?.debug("UIDatePicker date \(x)")
             }
@@ -121,7 +138,11 @@ class APIWrappersViewController: ViewController {
 
         // MARK: UITextField
 
-        textField.rx_text
+        // also test two way binding
+        let textValue = Variable("")
+        _ = textField <-> textValue
+
+        textValue.asObservable()
             .subscribeNext { [weak self] x in
                 self?.debug("UITextField text \(x)")
             }
@@ -139,9 +160,13 @@ class APIWrappersViewController: ViewController {
 
         // MARK: UITextView
 
-        textView.rx_text
+        // also test two way binding
+        let textViewValue = Variable("")
+        _ = textView <-> textViewValue
+
+        textViewValue.asObservable()
             .subscribeNext { [weak self] x in
-                self?.debug("UITextView event \(x)")
+                self?.debug("UITextView text \(x)")
             }
             .addDisposableTo(disposeBag)
 
@@ -152,16 +177,15 @@ class APIWrappersViewController: ViewController {
         #endif
 
         manager.rx_didUpdateLocations
-            .subscribeNext { [weak self] x in
-                self?.debug("rx_didUpdateLocations \(x)")
+            .subscribeNext { x in
+                print("rx_didUpdateLocations \(x)")
             }
             .addDisposableTo(disposeBag)
 
         _ = manager.rx_didFailWithError
-            .subscribeNext { [weak self] x in
-                self?.debug("rx_didFailWithError \(x)")
+            .subscribeNext { x in
+                print("rx_didFailWithError \(x)")
             }
-        
         
         manager.rx_didChangeAuthorizationStatus
             .subscribeNext { status in
@@ -175,7 +199,7 @@ class APIWrappersViewController: ViewController {
 
     }
 
-    func debug(string: String) {
+    func debug(_ string: String) {
         print(string)
         debugLabel.text = string
     }

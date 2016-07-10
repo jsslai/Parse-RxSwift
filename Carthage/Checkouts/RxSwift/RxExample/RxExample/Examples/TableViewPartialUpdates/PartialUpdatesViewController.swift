@@ -26,9 +26,9 @@ class PartialUpdatesViewController : ViewController {
     @IBOutlet weak var partialUpdatesTableViewOutlet: UITableView!
     @IBOutlet weak var partialUpdatesCollectionViewOutlet: UICollectionView!
 
-    var timer: NSTimer? = nil
+    var timer: Foundation.Timer? = nil
 
-    static let initialValue: [HashableSectionModel<String, Int>] = [
+    static let initialValue: [AnimatableSectionModel<String, Int>] = [
         NumberSection(model: "section 1", items: [1, 2, 3]),
         NumberSection(model: "section 2", items: [4, 5, 6]),
         NumberSection(model: "section 3", items: [7, 8, 9]),
@@ -42,7 +42,7 @@ class PartialUpdatesViewController : ViewController {
         ]
 
 
-    static let firstChange: [HashableSectionModel<String, Int>]? = nil
+    static let firstChange: [AnimatableSectionModel<String, Int>]? = nil
 
     var generator = Randomizer(rng: PseudoRandomGenerator(4, 3), sections: initialValue)
 
@@ -63,10 +63,10 @@ class PartialUpdatesViewController : ViewController {
             let nSections = 10
             let nItems = 100
 
-            var sections = [HashableSectionModel<String, Int>]()
+            var sections = [AnimatableSectionModel<String, Int>]()
 
             for i in 0 ..< nSections {
-                sections.append(HashableSectionModel(model: "Section \(i + 1)", items: Array(i * nItems ..< (i + 1) * nItems)))
+                sections.append(AnimatableSectionModel(model: "Section \(i + 1)", items: Array(i * nItems ..< (i + 1) * nItems)))
             }
 
             generator = Randomizer(rng: PseudoRandomGenerator(4, 3), sections: sections)
@@ -85,7 +85,7 @@ class PartialUpdatesViewController : ViewController {
         skinTableViewDataSource(reloadDataSource)
 
         self.sections.asObservable()
-            .bindTo(partialUpdatesTableViewOutlet.rx_itemsAnimatedWithDataSource(tvAnimatedDataSource))
+            .bindTo(partialUpdatesTableViewOutlet.rx_itemsWithDataSource(tvAnimatedDataSource))
             .addDisposableTo(disposeBag)
 
         self.sections.asObservable()
@@ -135,40 +135,40 @@ class PartialUpdatesViewController : ViewController {
             .addDisposableTo(disposeBag)
     }
 
-    func skinTableViewDataSource(dataSource: RxTableViewSectionedDataSource<NumberSection>) {
-        dataSource.cellFactory = { (tv, ip, i) in
-            let cell = tv.dequeueReusableCellWithIdentifier("Cell")
-                ?? UITableViewCell(style:.Default, reuseIdentifier: "Cell")
+    func skinTableViewDataSource(_ dataSource: RxTableViewSectionedDataSource<NumberSection>) {
+        dataSource.configureCell = { (_, tv, ip, i) in
+            let cell = tv.dequeueReusableCell(withIdentifier: "Cell")
+                ?? UITableViewCell(style:.default, reuseIdentifier: "Cell")
 
             cell.textLabel!.text = "\(i)"
 
             return cell
         }
 
-        dataSource.titleForHeaderInSection = { [unowned dataSource] (section: Int) -> String in
+        dataSource.titleForHeaderInSection = { (ds, section: Int) -> String in
             return dataSource.sectionAtIndex(section).model
         }
     }
 
-    func skinCollectionViewDataSource(dataSource: RxCollectionViewSectionedDataSource<NumberSection>) {
-        dataSource.cellFactory = { (cv, ip, i) in
-            let cell = cv.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: ip) as! NumberCell
+    func skinCollectionViewDataSource(_ dataSource: CollectionViewSectionedDataSource<NumberSection>) {
+        dataSource.configureCell = { (_, cv, ip, i) in
+            let cell = cv.dequeueReusableCell(withReuseIdentifier: "Cell", for: ip as IndexPath) as! NumberCell
 
             cell.value!.text = "\(i)"
 
             return cell
         }
 
-        dataSource.supplementaryViewFactory = { [unowned dataSource] (cv, kind, ip) in
-            let section = cv.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "Section", forIndexPath: ip) as! NumberSectionView
+        dataSource.supplementaryViewFactory = { (dataSource, cv, kind, ip) in
+            let section = cv.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Section", for: ip as IndexPath) as! NumberSectionView
 
-            section.value!.text = "\(dataSource.sectionAtIndex(ip.section).model)"
+            section.value!.text = "\(dataSource.sectionAtIndex((ip as NSIndexPath).section).model)"
 
             return section
         }
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         self.timer?.invalidate()
     }
 

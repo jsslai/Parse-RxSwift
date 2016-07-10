@@ -14,7 +14,6 @@ env:
     - TEST_TYPE=Deployment
     - TEST_TYPE=Starters
     - TEST_TYPE=CocoaPods
-    - TEST_TYPE=Carthage
 git:
   submodules: false
 before_install:
@@ -25,7 +24,7 @@ install:
     bundle install
     if [ "$TEST_TYPE" == "Carthage" ]; then
       brew update
-      brew install carthage
+      brew install carthage || brew upgrade carthage
     fi
   fi
 script:
