@@ -31,7 +31,7 @@ extension DriverTest {
         var firstElements = [R]()
         var secondElements = [R]()
 
-        let subscribeFinished = self.expectation(withDescription: "subscribeFinished")
+        let subscribeFinished = self.expectation(description: "subscribeFinished")
 
         var expectation1: XCTestExpectation!
         var expectation2: XCTestExpectation!
@@ -81,16 +81,16 @@ extension DriverTest {
             return NopDisposable.instance
         }
 
-        waitForExpectations(withTimeout: 1.0) { error in
+        waitForExpectations(timeout: 1.0) { error in
             XCTAssertTrue(error == nil)
         }
 
-        expectation1 = self.expectation(withDescription: "finished1")
-        expectation2 = self.expectation(withDescription: "finished2")
+        expectation1 = self.expectation(description: "finished1")
+        expectation2 = self.expectation(description: "finished2")
 
         subscribedOnBackground()
 
-        waitForExpectations(withTimeout: 1.0) { error in
+        waitForExpectations(timeout: 1.0) { error in
             XCTAssertTrue(error == nil)
         }
 
@@ -548,10 +548,10 @@ extension DriverTest {
 
         var events = [Int]()
 
-        let driver = hotObservable.asDriver(onErrorJustReturn: -1).doOnNext { e in
+        let driver = hotObservable.asDriver(onErrorJustReturn: -1).do(onNext: { e in
             XCTAssertTrue(isMainThread())
             events.append(e)
-        }
+        })
 
         let results = subscribeTwiceOnBackgroundSchedulerAndOnlyOneSubscription(driver) {
             XCTAssertTrue(hotObservable.subscriptions == [SubscribedToHotObservable])
@@ -572,10 +572,10 @@ extension DriverTest {
         let hotObservable = BackgroundThreadPrimitiveHotObservable<Int>()
 
         var completed = false
-        let driver = hotObservable.asDriver(onErrorJustReturn: -1).doOnCompleted { e in
+        let driver = hotObservable.asDriver(onErrorJustReturn: -1).do(onCompleted: { e in
             XCTAssertTrue(isMainThread())
             completed = true
-        }
+        })
 
         let results = subscribeTwiceOnBackgroundSchedulerAndOnlyOneSubscription(driver) {
             XCTAssertTrue(hotObservable.subscriptions == [SubscribedToHotObservable])

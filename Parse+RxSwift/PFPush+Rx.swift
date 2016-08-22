@@ -53,7 +53,7 @@ extension PFPush {
         })
     }
     
-    public static func rx_getSubscribedChannels() -> Observable<Set<NSObject>> {
+    public static func rx_getSubscribedChannels() -> Observable<Set<AnyHashable>> {
         return createWithParseCallback({ observer in
             self.getSubscribedChannelsInBackground(ParseRxCallbacks.rx_parseUnwrappedOptionalCallback(observer))
         })

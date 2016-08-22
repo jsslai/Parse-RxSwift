@@ -35,7 +35,7 @@ extension UICollectionView {
 
          items
          .bindTo(collectionView.rx_itemsWithCellFactory) { (collectionView, row, element) in
-             let indexPath = NSIndexPath(forItem: row, inSection: 0)
+             let indexPath = IndexPath(forItem: row, inSection: 0)
              let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! NumberCell
              cell.value?.text = "\(element) @ \(row)"
              return cell
@@ -135,7 +135,7 @@ extension UICollectionView {
             .addDisposableTo(disposeBag)
     */
     public func rx_itemsWithDataSource<
-            DataSource: protocol<RxCollectionViewDataSourceType, UICollectionViewDataSource>,
+            DataSource: RxCollectionViewDataSourceType & UICollectionViewDataSource,
             O: ObservableType where DataSource.Element == O.E
         >
         (_ dataSource: DataSource)

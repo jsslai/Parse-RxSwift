@@ -7,5 +7,6 @@
 // of patent rights can be found in the PATENTS file in the same directory.
 //
 
-SDKROOT = macosx
-MACOSX_DEPLOYMENT_TARGET = 10.9
+BUNDLE_LOADER = $(TEST_HOST)
+
+OTHER_LDFLAGS = $(inherited) -ObjC -framework XCTest

@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2015-present, Parse, LLC.
+// Copyright (c) 2014, Facebook, Inc.
 // All rights reserved.
 //
 // This source code is licensed under the BSD-style license found in the
@@ -7,13 +7,4 @@
 // of patent rights can be found in the PATENTS file in the same directory.
 //
 
-ENABLE_NS_ASSERTIONS = NO
-MTL_ENABLE_DEBUG_INFO = NO
-
-DYLIB_COMPATIBILITY_VERSION = 1
-DYLIB_CURRENT_VERSION = 1
-
-SKIP_INSTALL = YES
-
-CLANG_MODULES_AUTOLINK = NO
-CLANG_ENABLE_MODULES = YES
+BOLTS_OBJC_VERSION = 1.8.4

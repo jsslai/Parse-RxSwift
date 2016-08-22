@@ -138,7 +138,7 @@ extension UITableView {
             .addDisposableTo(disposeBag)
     */
     public func rx_itemsWithDataSource<
-            DataSource: protocol<RxTableViewDataSourceType, UITableViewDataSource>,
+            DataSource: RxTableViewDataSourceType & UITableViewDataSource,
             O: ObservableType where DataSource.Element == O.E
         >
         (_ dataSource: DataSource)
@@ -283,7 +283,7 @@ extension UITableView {
     Reactive wrapper for `delegate` message `tableView:willDisplayCell:forRowAtIndexPath:`.
     */
     public var rx_willDisplayCell: ControlEvent<WillDisplayCellEvent> {
-        let source: Observable<DidEndDisplayingCellEvent> = rx_delegate.observe(#selector(UITableViewDelegate.tableView(_:willDisplay:forRowAt:)))
+        let source: Observable<WillDisplayCellEvent> = rx_delegate.observe(#selector(UITableViewDelegate.tableView(_:willDisplay:forRowAt:)))
             .map { a in
                 return (try castOrThrow(UITableViewCell.self, a[1]), try castOrThrow(IndexPath.self, a[2]))
             }

@@ -1,9 +1,37 @@
 # Bolts CHANGELOG
 
+## 1.8.4
+
+**Fixed**
+- Fix potential breaking change related to dynamic library compatibility version.  
+  [#270](https://github.com/BoltsFramework/Bolts-ObjC/pull/270)
+  by [Nikita Lutsenko](https://github.com/nlutsenko)
+
+## 1.8.3
+
+**Fixed**
+- Fix potential deadlock when using `BFTask.-waitUntilFinished`.  
+  [#263](https://github.com/BoltsFramework/Bolts-ObjC/pull/263)
+  by [Nikita Lutsenko](https://github.com/nlutsenko)
+
+
+## 1.8.2
+
+**Fixed**
+- Fixed custom build frameworks script.  
+  [#263](https://github.com/BoltsFramework/Bolts-ObjC/pull/263)
+  by [Nikita Lutsenko](https://github.com/nlutsenko)
+- Fixed incorrect dynamic framework install name base and install name making dynamic framework not load in some cases.  
+  [#266](https://github.com/BoltsFramework/Bolts-ObjC/pull/266)
+  by [Nikita Lutsenko](https://github.com/nlutsenko)
+- Fixed compilation of dynamic frameworks for watchOS/tvOS when no code signing identity is present.  
+  [#266](https://github.com/BoltsFramework/Bolts-ObjC/pull/266)
+  by [Nikita Lutsenko](https://github.com/nlutsenko)
+
 ## 1.8.1
 
 **Fixed**
-- Fixed compilation of dynamic frameworks due to codesigning requirements.
+- Fixed compilation of dynamic frameworks due to codesigning requirements.  
   [#260](https://github.com/BoltsFramework/Bolts-ObjC/pull/260)
   by [Nikita Lutsenko](https://github.com/nlutsenko)
 

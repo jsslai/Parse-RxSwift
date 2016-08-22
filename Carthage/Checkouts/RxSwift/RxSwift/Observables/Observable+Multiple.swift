@@ -21,7 +21,7 @@ extension Collection where Iterator.Element : ObservableType {
     - returns: An observable sequence containing the result of combining elements of the sources using the specified result selector function.
     */
     // @warn_unused_result(message:"http://git.io/rxs.uo")
-    public func combineLatest<R>(resultSelector: ([Generator.Element.E]) throws -> R) -> Observable<R> {
+    public func combineLatest<R>(_ resultSelector: ([Generator.Element.E]) throws -> R) -> Observable<R> {
         return CombineLatestCollectionType(sources: self, resultSelector: resultSelector)
     }
 }
@@ -39,7 +39,7 @@ extension Collection where Iterator.Element : ObservableType {
     - returns: An observable sequence containing the result of combining elements of the sources using the specified result selector function.
     */
     // @warn_unused_result(message:"http://git.io/rxs.uo")
-    public func zip<R>(resultSelector: ([Generator.Element.E]) throws -> R) -> Observable<R> {
+    public func zip<R>(_ resultSelector: ([Generator.Element.E]) throws -> R) -> Observable<R> {
         return ZipCollectionType(sources: self, resultSelector: resultSelector)
     }
 }
@@ -79,7 +79,7 @@ extension ObservableType {
     */
     // @warn_unused_result(message:"http://git.io/rxs.uo")
     public func concat<O: ObservableConvertibleType where O.E == E>(_ second: O) -> Observable<E> {
-        return [asObservable(), second.asObservable()].concat()
+        return [self.asObservable(), second.asObservable()].concat()
     }
 }
 
@@ -187,7 +187,7 @@ extension ObservableType {
     - returns: An observable sequence containing the source sequence's elements, followed by the elements produced by the handler's resulting observable sequence in case an error occurred.
     */
     // @warn_unused_result(message:"http://git.io/rxs.uo")
-    public func catchError(_ handler: (ErrorProtocol) throws -> Observable<E>)
+    public func catchError(_ handler: (Swift.Error) throws -> Observable<E>)
         -> Observable<E> {
         return Catch(source: asObservable(), handler: handler)
     }

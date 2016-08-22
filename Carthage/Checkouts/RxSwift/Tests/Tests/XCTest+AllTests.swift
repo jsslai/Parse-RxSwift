@@ -11,7 +11,7 @@ import RxSwift
 import RxTests
 import XCTest
 
-func XCTAssertErrorEqual(_ lhs: ErrorProtocol, _ rhs: ErrorProtocol) {
+func XCTAssertErrorEqual(_ lhs: Swift.Error, _ rhs: Swift.Error) {
     let event1: Event<Int> = .error(lhs)
     let event2: Event<Int> = .error(rhs)
     
@@ -19,7 +19,7 @@ func XCTAssertErrorEqual(_ lhs: ErrorProtocol, _ rhs: ErrorProtocol) {
 }
 
 func NSValuesAreEqual(_ lhs: AnyObject, _ rhs: AnyObject) -> Bool {
-    if let lhsValue = lhs as? NSValue, rhsValue = rhs as? NSValue {
+    if let lhsValue = lhs as? NSValue, let rhsValue = rhs as? NSValue {
         #if os(Linux)
             return lhsValue.isEqual(rhsValue)
         #else
