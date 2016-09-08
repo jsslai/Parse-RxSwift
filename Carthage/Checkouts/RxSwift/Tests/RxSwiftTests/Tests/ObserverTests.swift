@@ -18,14 +18,14 @@ extension ObserverTests {
         var observer: AnyObserver<Int>!
         let a: Observable<Int> = Observable.create { o in
             observer = o
-            return NopDisposable.instance
+            return Disposables.create()
         }
 
         var elements = [Int]()
 
-        _ = a.subscribeNext { n in
+        _ = a.subscribe(onNext: { n in
             elements.append(n)
-        }
+        })
 
         XCTAssertEqual(elements, [])
 
@@ -38,7 +38,7 @@ extension ObserverTests {
         var observer: AnyObserver<Int>!
         let a: Observable<Int> = Observable.create { o in
             observer = o
-            return NopDisposable.instance
+            return Disposables.create()
         }
 
         var elements = [Int]()
@@ -67,14 +67,14 @@ extension ObserverTests {
         var observer: AnyObserver<Int>!
         let a: Observable<Int> = Observable.create { o in
             observer = o
-            return NopDisposable.instance
+            return Disposables.create()
         }
 
         var elements = [Int]()
 
-        _ = a.subscribeNext { n in
+        _ = a.subscribe(onNext: { n in
             elements.append(n)
-        }
+        })
 
         XCTAssertEqual(elements, [])
 

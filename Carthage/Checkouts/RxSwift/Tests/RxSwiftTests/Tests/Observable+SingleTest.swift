@@ -665,7 +665,7 @@ extension ObservableSingleTest {
         XCTAssertEqual(res.events, correctMessages)
         XCTAssertEqual(xs.subscriptions, correctSubscriptions)
 
-        XCTAssertTrue((recordedError as! AnyObject) === testError)
+        XCTAssertTrue((recordedError as AnyObject) === testError)
         XCTAssertEqual(numberOfTimesInvoked, 1)
     }
 
@@ -765,6 +765,85 @@ extension ObservableSingleTest {
         XCTAssertEqual(res.events, correctMessages)
         XCTAssertEqual(xs.subscriptions, correctSubscriptions)
     }
+
+    enum DoOnEvent {
+        case sourceSubscribe
+        case sourceDispose
+        case doOnNext
+        case doOnCompleted
+        case doOnError
+        case doOnSubscribe
+        case doOnDispose
+    }
+
+    func testDoOnOrder_Completed() {
+        var events = [DoOnEvent]()
+
+        _ = Observable<Int>.create { observer in
+                events.append(.sourceSubscribe)
+                observer.on(.next(0))
+                observer.on(.completed)
+                return Disposables.create {
+                    events.append(.sourceDispose)
+                }
+            }
+            .do(
+                onNext: { _ in events.append(.doOnNext) },
+                onCompleted: { events.append(.doOnCompleted) },
+                onSubscribe: { events.append(.doOnSubscribe) },
+                onDispose: { events.append(.doOnDispose) }
+            )
+            .subscribe { _ in }
+
+
+        XCTAssertEqual(events, [.doOnSubscribe, .sourceSubscribe, .doOnNext, .doOnCompleted, .sourceDispose, .doOnDispose])
+    }
+
+    func testDoOnOrder_Error() {
+        var events = [DoOnEvent]()
+
+        _ = Observable<Int>.create { observer in
+                events.append(.sourceSubscribe)
+                observer.on(.next(0))
+                observer.on(.error(testError))
+                return Disposables.create {
+                    events.append(.sourceDispose)
+                }
+            }
+            .do(
+                onNext: { _ in events.append(.doOnNext) },
+                onError: { _ in events.append(.doOnError) },
+                onSubscribe: { events.append(.doOnSubscribe) },
+                onDispose: { events.append(.doOnDispose) }
+            )
+            .subscribe { _ in }
+
+
+        XCTAssertEqual(events, [.doOnSubscribe, .sourceSubscribe, .doOnNext, .doOnError, .sourceDispose, .doOnDispose])
+    }
+
+    func testDoOnOrder_Dispose() {
+        var events = [DoOnEvent]()
+
+        Observable<Int>.create { observer in
+                events.append(.sourceSubscribe)
+                observer.on(.next(0))
+                return Disposables.create {
+                    events.append(.sourceDispose)
+                }
+            }
+            .do(
+                onNext: { _ in events.append(.doOnNext) },
+                onSubscribe: { events.append(.doOnSubscribe) },
+                onDispose: { events.append(.doOnDispose) }
+            )
+            .subscribe { _ in }
+            .dispose()
+
+
+        XCTAssertEqual(events, [.doOnSubscribe, .sourceSubscribe, .doOnNext, .sourceDispose, .doOnDispose])
+    }
+
 }
 
 // retry
@@ -985,7 +1064,7 @@ extension ObservableSingleTest {
             observer.on(.next(5))
             observer.on(.completed)
 
-            return NopDisposable.instance
+            return Disposables.create()
         }
 
         _ = sequenceSendingImmediateError
@@ -1377,7 +1456,7 @@ extension ObservableSingleTest {
             observer.on(.next(5))
             observer.on(.completed)
 
-            return NopDisposable.instance
+            return Disposables.create()
         }
 
         _ = sequenceSendingImmediateError

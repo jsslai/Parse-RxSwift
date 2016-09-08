@@ -267,8 +267,28 @@ extension ObservableType {
      - returns: The source sequence switching to the other sequence in case of a timeout.
      */
     // @warn_unused_result(message:"http://git.io/rxs.uo")
-    public func timeout<O: ObservableConvertibleType where E == O.E>(_ dueTime: RxTimeInterval, other: O, scheduler: SchedulerType)
-        -> Observable<E> {
+    public func timeout<O: ObservableConvertibleType>(_ dueTime: RxTimeInterval, other: O, scheduler: SchedulerType)
+        -> Observable<E> where E == O.E {
             return Timeout(source: self.asObservable(), dueTime: dueTime, other: other.asObservable(), scheduler: scheduler)
+    }
+}
+
+// MARK: delay
+
+extension ObservableType {
+    
+    /**
+     Returns an observable sequence by the source observable sequence shifted forward in time by a specified delay. Error events from the source observable sequence are not delayed.
+     
+     - seealso: [delay operator on reactivex.io](http://reactivex.io/documentation/operators/delay.html)
+     
+     - parameter dueTime: Relative time shift of the source by.
+     - parameter scheduler: Scheduler to run the subscription delay timer on.
+     - returns: the source Observable shifted in time by the specified delay.
+     */
+    // @warn_unused_result(message="http://git.io/rxs.uo")
+    public func delay(_ dueTime: RxTimeInterval, scheduler: SchedulerType)
+        -> Observable<E> {
+            return Delay(source: self.asObservable(), dueTime: dueTime, scheduler: scheduler)
     }
 }

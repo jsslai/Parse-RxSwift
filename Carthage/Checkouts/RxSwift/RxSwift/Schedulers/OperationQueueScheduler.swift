@@ -32,14 +32,14 @@ public class OperationQueueScheduler: ImmediateSchedulerType {
     - parameter action: Action to execute recursively. The last parameter passed to the action is used to trigger recursive scheduling of the action, passing in recursive invocation state.
     - returns: The disposable object used to cancel the scheduled action (best effort).
     */
-    public func schedule<StateType>(_ state: StateType, action: (StateType) -> Disposable) -> Disposable {
+    public func schedule<StateType>(_ state: StateType, action: @escaping (StateType) -> Disposable) -> Disposable {
         
         let compositeDisposable = CompositeDisposable()
         
         weak var compositeDisposableWeak = compositeDisposable
         
         let operation = BlockOperation {
-            if compositeDisposableWeak?.disposed ?? false {
+            if compositeDisposableWeak?.isDisposed ?? false {
                 return
             }
             
@@ -49,7 +49,7 @@ public class OperationQueueScheduler: ImmediateSchedulerType {
 
         self.operationQueue.addOperation(operation)
         
-        let _ = compositeDisposable.insert(AnonymousDisposable(operation.cancel))
+        let _ = compositeDisposable.insert(Disposables.create(with: operation.cancel))
 
         return compositeDisposable
     }

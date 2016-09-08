@@ -35,7 +35,7 @@ class ThrottleSink<O: ObserverType>
     func run() -> Disposable {
         let subscription = _parent._source.subscribe(self)
         
-        return StableCompositeDisposable.create(subscription, cancellable)
+        return Disposables.create(subscription, cancellable)
     }
 
     func on(_ event: Event<Element>) {
@@ -79,15 +79,15 @@ class ThrottleSink<O: ObserverType>
                 forwardOn(.next(value))
             }
         // }
-        return NopDisposable.instance
+        return Disposables.create()
     }
 }
 
 class Throttle<Element> : Producer<Element> {
     
-    private let _source: Observable<Element>
-    private let _dueTime: RxTimeInterval
-    private let _scheduler: SchedulerType
+    fileprivate let _source: Observable<Element>
+    fileprivate let _dueTime: RxTimeInterval
+    fileprivate let _scheduler: SchedulerType
     
     init(source: Observable<Element>, dueTime: RxTimeInterval, scheduler: SchedulerType) {
         _source = source
@@ -95,7 +95,7 @@ class Throttle<Element> : Producer<Element> {
         _scheduler = scheduler
     }
     
-    override func run<O: ObserverType where O.E == Element>(_ observer: O) -> Disposable {
+    override func run<O: ObserverType>(_ observer: O) -> Disposable where O.E == Element {
         let sink = ThrottleSink(parent: self, observer: observer)
         sink.disposable = sink.run()
         return sink

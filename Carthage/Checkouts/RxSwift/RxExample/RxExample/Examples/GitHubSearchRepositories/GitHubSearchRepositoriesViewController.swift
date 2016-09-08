@@ -48,14 +48,14 @@ class GitHubSearchRepositoriesViewController: ViewController, UITableViewDelegat
         }
 
 
-        let loadNextPageTrigger = self.tableView.rx_contentOffset
+        let loadNextPageTrigger = self.tableView.rx.contentOffset
             .flatMap { _ in
                 self.tableView.isNearBottomEdge(edgeOffset: 20.0)
                     ? Observable.just(())
                     : Observable.empty()
             }
 
-        let searchResult = self.searchBar.rx_text.asDriver()
+        let searchResult = self.searchBar.rx.text.asDriver()
             .throttle(0.3)
             .distinctUntilChanged()
             .flatMapLatest { query -> Driver<RepositoriesState> in
@@ -69,38 +69,38 @@ class GitHubSearchRepositoriesViewController: ViewController, UITableViewDelegat
 
         searchResult
             .map { $0.serviceState }
-            .drive(navigationController!.rx_serviceState)
+            .drive(navigationController!.rx.serviceState)
             .addDisposableTo(disposeBag)
 
         searchResult
             .map { [SectionModel(model: "Repositories", items: $0.repositories)] }
-            .drive(tableView.rx_itemsWithDataSource(dataSource))
+            .drive(tableView.rx.items(dataSource: dataSource))
             .addDisposableTo(disposeBag)
 
         searchResult
             .filter { $0.limitExceeded }
-            .driveNext { n in
+            .drive(onNext: { n in
                 showAlert("Exceeded limit of 10 non authenticated requests per minute for GitHub API. Please wait a minute. :(\nhttps://developer.github.com/v3/#rate-limiting") 
-            }
+            })
             .addDisposableTo(disposeBag)
 
         // dismiss keyboard on scroll
-        tableView.rx_contentOffset
+        tableView.rx.contentOffset
             .subscribe { _ in
-                if self.searchBar.isFirstResponder() {
+                if self.searchBar.isFirstResponder {
                     _ = self.searchBar.resignFirstResponder()
                 }
             }
             .addDisposableTo(disposeBag)
 
         // so normal delegate customization can also be used
-        tableView.rx_setDelegate(self)
+        tableView.rx.setDelegate(self)
             .addDisposableTo(disposeBag)
 
         // activity indicator in status bar
         // {
         GitHubSearchRepositoriesAPI.sharedAPI.activityIndicator
-            .drive(UIApplication.shared().rx_networkActivityIndicatorVisible)
+            .drive(UIApplication.shared.rx.networkActivityIndicatorVisible)
             .addDisposableTo(disposeBag)
         // }
     }

@@ -150,13 +150,13 @@ extension TestScheduler {
             let scheduledEvents = events[attemptCount].map { event in
                 return self.scheduleRelative((), dueTime: resolution * TimeInterval(event.time)) { _ in
                     observer.on(event.value)
-                    return  NopDisposable.instance
+                    return  Disposables.create()
                 }
             }
 
             attemptCount += 1
 
-            return CompositeDisposable(disposables: scheduledEvents)
+            return Disposables.create(scheduledEvents)
         }
     }
 
@@ -174,7 +174,7 @@ extension TestScheduler {
      - returns: Implementation of method that accepts arguments with parameter `Arg` and returns observable sequence
         with parameter `Ret`.
      */
-    func mock<Arg, Ret>(values: [String: Ret], errors: [String: Swift.Error] = [:], timelineSelector: (Arg) -> String) -> (Arg) -> Observable<Ret> {
+    func mock<Arg, Ret>(values: [String: Ret], errors: [String: Swift.Error] = [:], timelineSelector: @escaping (Arg) -> String) -> (Arg) -> Observable<Ret> {
         return { (parameters: Arg) -> Observable<Ret> in
             let timeline = timelineSelector(parameters)
 

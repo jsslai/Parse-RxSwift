@@ -1,3 +1,3 @@
 github "BoltsFramework/Bolts-ObjC" "1.8.4"
-github "jsslai/RxSwift" "1395bbd602ec225684a70ac529d3c304913cc246"
+github "ldiqual/RxSwift" "443cbd53dffb67bef328f2a64657948515aca593"
 github "ParsePlatform/Parse-SDK-iOS-OSX" "1.14.2"

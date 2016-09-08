@@ -8,11 +8,11 @@
 
 import Foundation
 
-class WindowTimeCountSink<Element, O: ObserverType where O.E == Observable<Element>>
+class WindowTimeCountSink<Element, O: ObserverType>
     : Sink<O>
     , ObserverType
     , LockOwnerType
-    , SynchronizedOnType {
+    , SynchronizedOnType where O.E == Observable<Element> {
     typealias Parent = WindowTimeCount<Element>
     typealias E = Element
     
@@ -96,7 +96,7 @@ class WindowTimeCountSink<Element, O: ObserverType where O.E == Observable<Eleme
     }
     
     func createTimer(_ windowId: Int) {
-        if _timerD.disposed {
+        if _timerD.isDisposed {
             return
         }
         
@@ -125,17 +125,17 @@ class WindowTimeCountSink<Element, O: ObserverType where O.E == Observable<Eleme
             
             self.createTimer(newId)
             
-            return NopDisposable.instance
+            return Disposables.create()
         }
     }
 }
 
 class WindowTimeCount<Element> : Producer<Observable<Element>> {
     
-    private let _timeSpan: RxTimeInterval
-    private let _count: Int
-    private let _scheduler: SchedulerType
-    private let _source: Observable<Element>
+    fileprivate let _timeSpan: RxTimeInterval
+    fileprivate let _count: Int
+    fileprivate let _scheduler: SchedulerType
+    fileprivate let _source: Observable<Element>
     
     init(source: Observable<Element>, timeSpan: RxTimeInterval, count: Int, scheduler: SchedulerType) {
         _source = source
@@ -144,7 +144,7 @@ class WindowTimeCount<Element> : Producer<Observable<Element>> {
         _scheduler = scheduler
     }
     
-    override func run<O : ObserverType where O.E == Observable<Element>>(_ observer: O) -> Disposable {
+    override func run<O : ObserverType>(_ observer: O) -> Disposable where O.E == Observable<Element> {
         let sink = WindowTimeCountSink(parent: self, observer: observer)
         sink.disposable = sink.run()
         return sink

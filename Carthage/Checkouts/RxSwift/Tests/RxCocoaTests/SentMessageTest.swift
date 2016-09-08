@@ -28,7 +28,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: SentMessageTestBase_dealloc) in
-                return [target.rx_sentMessage(NSSelectorFromString("dealloc"))]
+                return [target.rx.sentMessage(NSSelectorFromString("dealloc"))]
             },
             objectActingClassChange: [
                 .implementationAdded(forSelector: NSSelectorFromString("dealloc")),
@@ -43,7 +43,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: SentMessageTest_dealloc) in
-                return [target.rx_sentMessage(NSSelectorFromString("dealloc"))]
+                return [target.rx.sentMessage(NSSelectorFromString("dealloc"))]
             },
             objectActingClassChange: [
                 .implementationAdded(forSelector: NSSelectorFromString("dealloc")),
@@ -60,7 +60,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: SentMessageTestBase_dealloc2) in
-                return [target.rx_deallocating.map { _ in [] }]
+                return [target.rx.deallocating.map { _ in [] }]
             },
             objectActingClassChange: [
                 .implementationAdded(forSelector: NSSelectorFromString("dealloc")),
@@ -75,7 +75,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: SentMessageTest_dealloc2) in
-                return [target.rx_deallocating.map { _ in [] }]
+                return [target.rx.deallocating.map { _ in [] }]
             },
             objectActingClassChange: [
                 .implementationAdded(forSelector: NSSelectorFromString("dealloc")),
@@ -92,7 +92,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: SentMessageTestBase_dealloc_base) in
-                return [target.rx_sentMessage(NSSelectorFromString("dealloc"))]
+                return [target.rx.sentMessage(NSSelectorFromString("dealloc"))]
             },
             objectActingClassChange: [
                 .implementationChanged(forSelector: NSSelectorFromString("dealloc")),
@@ -107,7 +107,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: SentMessageTest_dealloc_base) in
-                return [target.rx_sentMessage(NSSelectorFromString("dealloc"))]
+                return [target.rx.sentMessage(NSSelectorFromString("dealloc"))]
             },
             objectActingClassChange: [
                 .implementationAdded(forSelector: NSSelectorFromString("dealloc")),
@@ -124,7 +124,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: SentMessageTestBase_dealloc_subclass) in
-                return [target.rx_sentMessage(NSSelectorFromString("dealloc"))]
+                return [target.rx.sentMessage(NSSelectorFromString("dealloc"))]
             },
             objectActingClassChange: [
                 .implementationAdded(forSelector: NSSelectorFromString("dealloc")),
@@ -139,7 +139,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: SentMessageTest_dealloc_subclass) in
-                return [target.rx_sentMessage(NSSelectorFromString("dealloc"))]
+                return [target.rx.sentMessage(NSSelectorFromString("dealloc"))]
             },
             objectActingClassChange: [
                 .implementationChanged(forSelector: NSSelectorFromString("dealloc")),
@@ -156,7 +156,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: SentMessageTestBase_dealloc_base_subclass) in
-                return [target.rx_sentMessage(NSSelectorFromString("dealloc"))]
+                return [target.rx.sentMessage(NSSelectorFromString("dealloc"))]
             },
             objectActingClassChange: [
                 .implementationChanged(forSelector: NSSelectorFromString("dealloc")),
@@ -171,7 +171,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: SentMessageTest_dealloc_base_subclass) in
-                return [target.rx_sentMessage(NSSelectorFromString("dealloc"))]
+                return [target.rx.sentMessage(NSSelectorFromString("dealloc"))]
             },
             objectActingClassChange: [
                 .implementationChanged(forSelector: NSSelectorFromString("dealloc")),
@@ -192,7 +192,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(SentMessageTest_interact_forwarding.self),
             observeIt: { target in
-                return [target.rx_sentMessage(#selector(SentMessageTestBase_shared.justCalledObject(toSay:)))]
+                return [target.rx.sentMessage(#selector(SentMessageTestBase_shared.justCalledObject(toSay:)))]
             },
             objectActingClassChange: [
             ],
@@ -217,7 +217,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(SentMessageTestBase_interact_forwarding.self),
             observeIt: { target in
-                return [target.rx_sentMessage(#selector(SentMessageTestBase_shared.justCalledObject(toSay:)))]
+                return [target.rx.sentMessage(#selector(SentMessageTestBase_shared.justCalledObject(toSay:)))]
             },
             objectActingClassChange: [
             ],
@@ -243,7 +243,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(SentMessageTest_interact_forwarding.self),
             observeIt: { target in
-                return [target.rx_sentMessage(#selector(SentMessageTestBase_shared.justCalledObject(toSay:)))]
+                return [target.rx.sentMessage(#selector(SentMessageTestBase_shared.justCalledObject(toSay:)))]
             },
             objectActingClassChange: [
             ],
@@ -268,7 +268,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(SentMessageTestBase_interact_forwarding.self),
             observeIt: { target in
-                return [target.rx_sentMessage(#selector(SentMessageTestBase_shared.justCalledObject(toSay:)))]
+                return [target.rx.sentMessage(#selector(SentMessageTestBase_shared.justCalledObject(toSay:)))]
             },
             objectActingClassChange: [
             ],
@@ -361,14 +361,14 @@ extension SentMessageTest {
 
     func _baseClass_subClass_dont_interact_for_optimized_version
     <
-        BaseClass: protocol<SentMessageTestClassCreationProtocol, NSObjectProtocol>,
-        TargetClass: protocol<SentMessageTestClassCreationProtocol, NSObjectProtocol>
-    >(_ baseClass: BaseClass.Type, _ targetClass: TargetClass.Type, _ method: Selector, _ invoke: (BaseClass) -> [[MethodParameters]]) {
+        BaseClass: SentMessageTestClassCreationProtocol & NSObjectProtocol,
+        TargetClass: SentMessageTestClassCreationProtocol & NSObjectProtocol
+    >(_ baseClass: BaseClass.Type, _ targetClass: TargetClass.Type, _ method: Selector, _ invoke: @escaping (BaseClass) -> [[MethodParameters]]) {
         // now force forwarding mechanism for normal class
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { target in
-                return [(target as! NSObject).rx_sentMessage(method)]
+                return [(target as! NSObject).rx.sentMessage(method)]
             },
             objectActingClassChange: [
             ],
@@ -383,7 +383,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: BaseClass) in
-                return [(target as! NSObject).rx_sentMessage(method)]
+                return [(target as! NSObject).rx.sentMessage(method)]
             },
             objectActingClassChange: [
 
@@ -398,7 +398,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { target in
-                return [(target as! NSObject).rx_sentMessage(method)]
+                return [(target as! NSObject).rx.sentMessage(method)]
             },
             objectActingClassChange: [
             ],
@@ -413,7 +413,7 @@ extension SentMessageTest {
         ensureGlobalRuntimeChangesAreCached(
             createNormalInstance(),
             observeIt: { (target: BaseClass) in
-                return [(target as! NSObject).rx_sentMessage(method)]
+                return [(target as! NSObject).rx.sentMessage(method)]
             },
             objectActingClassChange: [
             ],
@@ -446,9 +446,9 @@ extension SentMessageTest {
 extension SentMessageTest {
     func testBasicForwardingCase() {
         let target = SentMessageTest_forwarding_basic()
-        var messages = [[AnyObject]]()
+        var messages = [[Any]]()
 
-        let d = target.rx_sentMessage(#selector(SentMessageTestBase_shared.message_allSupportedParameters(_:p2:p3:p4:p5:p6:p7:p8:p9:p10:p11:p12:p13:p14:p15:p16:))).subscribe(onNext: { n in
+        let d = target.rx.sentMessage(#selector(SentMessageTestBase_shared.message_allSupportedParameters(_:p2:p3:p4:p5:p6:p7:p8:p9:p10:p11:p12:p13:p14:p15:p16:))).subscribe(onNext: { n in
                 messages.append(n)
             }, onError: { e in
                 XCTFail("Errors out \(e)")
@@ -456,16 +456,16 @@ extension SentMessageTest {
 
         let objectParam = NSObject()
         let str: UnsafePointer<Int8> = ("123" as NSString).utf8String!
-        let unsafeStr: UnsafeMutablePointer<Int8> = UnsafeMutablePointer.init(str)
+        let unsafeStr: UnsafeMutablePointer<Int8> = UnsafeMutablePointer(mutating: str)
 
         let largeStruct = some_insanely_large_struct(a: (0, 1, 2, 3, 4, 5, 6, 7), some_large_text: nil, next: nil)
 
-        target.message_allSupportedParameters(objectParam, p2: target.dynamicType, p3: { x in x}, p4: -2, p5: -3, p6: -4, p7: -5,
+        target.message_allSupportedParameters(objectParam, p2: type(of: target), p3: { x in x}, p4: -2, p5: -3, p6: -4, p7: -5,
             p8: 1, p9: 2, p10: 3, p11: 4, p12: 1.0, p13: 2.0, p14: str, p15: unsafeStr, p16: largeStruct)
 
         d.dispose()
 
-        XCTAssertEqualAnyObjectArrayOfArrays(target.messages, messages)
+        XCTAssertEqualAnyObjectArrayOfArrays(target.messages as [[AnyObject]], messages)
     }
 }
 
@@ -476,7 +476,7 @@ extension SentMessageTest {
         let target = SentMessageTest_shared()
 
         do {
-            _ = try target.rx_sentMessage(NSSelectorFromString("unknownSelector:"))
+            _ = try target.rx.sentMessage(NSSelectorFromString("unknownSelector:"))
                 .toBlocking()
                 .first()
 
@@ -496,13 +496,13 @@ extension SentMessageTest {
         let target = SentMessageTest_shared()
 
         let disposeBag = DisposeBag()
-        target.rx_observe(NSArray.self, "messages")
-            .subscribeNext { _ in
-            }
+        target.rx.observe(NSArray.self, "messages")
+            .subscribe(onNext: { _ in
+            })
             .addDisposableTo(disposeBag)
 
         do {
-            _ = try target.rx_sentMessage(#selector(SentMessageTestBase_shared.justCalledBool(toSay:)))
+            _ = try target.rx.sentMessage(#selector(SentMessageTestBase_shared.justCalledBool(toSay:)))
                 .toBlocking()
                 .first()
 
@@ -525,7 +525,7 @@ extension SentMessageTest {
         object_setClass(target, SentMessageTest_shared_mock_interceptor.self)
 
         do {
-            _ = try target.rx_sentMessage(#selector(SentMessageTestBase_shared.justCalledBool(toSay:)))
+            _ = try target.rx.sentMessage(#selector(SentMessageTestBase_shared.justCalledBool(toSay:)))
                 .toBlocking()
                 .first()
 
@@ -547,7 +547,7 @@ extension SentMessageTest {
             let target = "\(Date())"
 
             do {
-                _ = try target.rx_sentMessage(#selector(_NSStringCoreType.length))
+                _ = try target.rx.sentMessage(#selector(_NSStringCoreType.length))
                     .toBlocking()
                     .first()
 
@@ -573,16 +573,16 @@ extension SentMessageTest {
     func testWorksWithKVOInCaseKVORegisteredAfter() {
         let target = SentMessageTest_shared()
 
-        let messages = target.rx_sentMessage(#selector(SentMessageTestBase_shared.justCalledBool(toSay:)))
+        let messages = target.rx.sentMessage(#selector(SentMessageTestBase_shared.justCalledBool(toSay:)))
 
-        let kvo = target.rx_observe(NSArray.self, "messages")
-            .subscribeNext { _ in
-            }
+        let kvo = target.rx.observe(NSArray.self, "messages")
+            .subscribe(onNext: { _ in
+            })
 
         var recordedMessages = [MethodParameters]()
-        let methodObserving = messages.subscribeNext { n in
+        let methodObserving = messages.subscribe(onNext: { n in
             recordedMessages.append(n)
-        }
+        })
 
         target.justCalledBool(toSay: true)
 
@@ -590,7 +590,7 @@ extension SentMessageTest {
 
         target.justCalledBool(toSay: false)
 
-        XCTAssertEqual(recordedMessages, [[NSNumber(value: true)], [NSNumber(value: false)]])
+        XCTAssertEqualAnyObjectArrayOfArrays(recordedMessages, [[NSNumber(value: true)], [NSNumber(value: false)]])
 
         methodObserving.dispose()
     }
@@ -608,7 +608,7 @@ extension SentMessageTest {
         autoreleasepool {
             let target = SentMessageTest_shared()
 
-            messages = target.rx_sentMessage(#selector(SentMessageTestBase_shared.justCalledBool(toSay:)))
+            messages = target.rx.sentMessage(#selector(SentMessageTestBase_shared.justCalledBool(toSay:)))
 
             target.justCalledBool(toSay: true)
 
@@ -622,7 +622,7 @@ extension SentMessageTest {
 
         }
 
-        XCTAssertEqual(recordedMessages, [[NSNumber(value: true)]])
+        XCTAssertEqualAnyObjectArrayOfArrays(recordedMessages, [[NSNumber(value: true)]])
         XCTAssertTrue(completed)
     }
 
@@ -631,7 +631,7 @@ extension SentMessageTest {
         autoreleasepool {
             let target = SentMessageTest_shared()
 
-            deallocSequence = target.rx_sentMessage(NSSelectorFromString("dealloc"))
+            deallocSequence = target.rx.sentMessage(NSSelectorFromString("dealloc"))
         }
 
         var called = false
@@ -651,7 +651,7 @@ extension SentMessageTest {
         autoreleasepool {
             let target = SentMessageTest_shared()
 
-            deallocSequence = target.rx_deallocating
+            deallocSequence = target.rx.deallocating
         }
 
         var called = false
@@ -674,7 +674,7 @@ extension SentMessageTest {
         let target = SentMessageTest_shared()
 
         do {
-            _ = try target.rx_sentMessage(NSSelectorFromString("class"))
+            _ = try target.rx.sentMessage(NSSelectorFromString("class"))
                 .toBlocking()
                 .first()
 
@@ -694,7 +694,7 @@ extension SentMessageTest {
         let target = SentMessageTest_shared()
 
         do {
-            _ = try target.rx_sentMessage(NSSelectorFromString("forwardingTargetForSelector:"))
+            _ = try target.rx.sentMessage(NSSelectorFromString("forwardingTargetForSelector:"))
                 .toBlocking()
                 .first()
 
@@ -714,7 +714,7 @@ extension SentMessageTest {
         let target = SentMessageTest_shared()
 
         do {
-            _ = try target.rx_sentMessage(NSSelectorFromString("methodSignatureForSelector:"))
+            _ = try target.rx.sentMessage(NSSelectorFromString("methodSignatureForSelector:"))
                 .toBlocking()
                 .first()
 
@@ -734,7 +734,7 @@ extension SentMessageTest {
         let target = SentMessageTest_shared()
 
         do {
-            _ = try target.rx_sentMessage(NSSelectorFromString("respondsToSelector:"))
+            _ = try target.rx.sentMessage(NSSelectorFromString("respondsToSelector:"))
                 .toBlocking()
                 .first()
 
@@ -758,7 +758,7 @@ extension SentMessageTest {
         let target = SentMessageTest_shared()
 
         do {
-            _ = try target.rx_sentMessage(#selector(SentMessageTestBase_shared.hugeResult))
+            _ = try target.rx.sentMessage(#selector(SentMessageTestBase_shared.hugeResult))
                 .toBlocking()
                 .first()
 
@@ -792,7 +792,7 @@ extension SentMessageTest {
         _testMessageRecordedAndAllCallsAreMade(#selector(SentMessageTestBase_shared.justCalledObject(toSay:)),
                                                sendMessage: { x in NSValue(nonretainedObject: x.justCalledObject(toSay: object)) },
                                                expectedResult: NSValue(nonretainedObject: object))
-        _testMessageRecordedAndAllCallsAreMade(#selector(SentMessageTestBase_shared.justCalledClass(toSay:)), sendMessage: { x in NSValue(nonretainedObject: x.justCalledClass(toSay: object.dynamicType)) }, expectedResult: NSValue(nonretainedObject: object.dynamicType))
+        _testMessageRecordedAndAllCallsAreMade(#selector(SentMessageTestBase_shared.justCalledClass(toSay:)), sendMessage: { x in NSValue(nonretainedObject: x.justCalledClass(toSay: type(of: object))) }, expectedResult: NSValue(nonretainedObject: type(of: object)))
         _testMessageRecordedAndAllCallsAreMade(#selector(SentMessageTestBase_shared.justCalledClosure(toSay:)),
                                                sendMessage: { x in "\(x.justCalledClosure(toSay: closure))" },
                                                expectedResult: "\(closure)")
@@ -886,10 +886,10 @@ extension SentMessageTest {
 
     }
 
-    func _testMessageRecordedAndAllCallsAreMade<Result: Equatable>(_ selector: Selector, sendMessage: (SentMessageTest_all_supported_types) -> Result, expectedResult: Result) {
-        var observedMessages = [[AnyObject]]()
-        var receivedDerivedClassMessage = [[AnyObject]]()
-        var receivedBaseClassMessage = [[AnyObject]]()
+    func _testMessageRecordedAndAllCallsAreMade<Result: Equatable>(_ selector: Selector, sendMessage: @escaping (SentMessageTest_all_supported_types) -> Result, expectedResult: Result) {
+        var observedMessages = [[Any]]()
+        var receivedDerivedClassMessage = [[Any]]()
+        var receivedBaseClassMessage = [[Any]]()
         var completed = false
 
         var result: Result! = nil
@@ -897,7 +897,7 @@ extension SentMessageTest {
         let action: () -> Disposable = { () -> Disposable in
             let target = SentMessageTest_all_supported_types()
 
-            let d = target.rx_sentMessage(selector).subscribe(onNext: { n in
+            let d = target.rx.sentMessage(selector).subscribe(onNext: { n in
                     observedMessages.append(n)
                 }, onError: { e in
                     XCTFail("Errors out \(e)")
@@ -928,13 +928,13 @@ extension SentMessageTest {
      Repeats action twice and makes sure there is no global leaks. Observing mechanism is lazy loaded so not caching
      results properly can cause serious memory leaks.
     */
-    func ensureGlobalRuntimeChangesAreCached<T: protocol<SentMessageTestClassCreationProtocol, NSObjectProtocol>>(
-        _ createIt: () -> T,
-        observeIt: (T) -> [Observable<MethodParameters>],
+    func ensureGlobalRuntimeChangesAreCached<T: SentMessageTestClassCreationProtocol & NSObjectProtocol>(
+        _ createIt: @escaping () -> T,
+        observeIt: @escaping (T) -> [Observable<MethodParameters>],
         objectActingClassChange: [ObjectRuntimeChange],
         objectRealClassChange: [ObjectRuntimeChange],
         runtimeChange: RxObjCRuntimeChange,
-        useIt: (T) -> [[MethodParameters]]
+        useIt: @escaping (T) -> [[MethodParameters]]
         ) {
         // First run normal experiment
         _ensureGlobalRuntimeChangesAreCached(createIt,
@@ -960,7 +960,7 @@ extension SentMessageTest {
 
     }
 
-    func _ensureGlobalRuntimeChangesAreCached<T: protocol<SentMessageTestClassCreationProtocol, NSObjectProtocol>>(
+    func _ensureGlobalRuntimeChangesAreCached<T: SentMessageTestClassCreationProtocol & NSObjectProtocol> (
         _ createIt: () -> T,
         observeIt: (T) -> [Observable<MethodParameters>],
         expectedActingClassChanges: [ObjectRuntimeChange],
@@ -1053,21 +1053,21 @@ extension SentMessageTest {
 // MARK: Convenience
 
 extension SentMessageTest {
-
-    override func observeValue(forKeyPath keyPath: String?, of object: AnyObject?, change: [NSKeyValueChangeKey : AnyObject]?, context: UnsafeMutablePointer<Void>?) {
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
 
     }
 
-    func createKVODynamicSubclassed<T: protocol<SentMessageTestClassCreationProtocol, NSObjectProtocol>>(_ type: T.Type = T.self) -> () -> (T, [Disposable]) {
+    func createKVODynamicSubclassed<T: SentMessageTestClassCreationProtocol & NSObjectProtocol>(_ type: T.Type = T.self) -> () -> (T, [Disposable]) {
         return {
             let t = T.createInstance()
-            //let disposable = (t as! NSObject).rx_observe(NSArray.self, "messages").publish().connect()
+            //let disposable = (t as! NSObject).rx.observe(NSArray.self, "messages").publish().connect()
             (t as! NSObject).addObserver(self, forKeyPath: "messages", options: [], context: nil)
-            return (t, [AnonymousDisposable { (t as! NSObject).removeObserver(self, forKeyPath: "messages") }])
+            return (t, [Disposables.create { (t as! NSObject).removeObserver(self, forKeyPath: "messages") }])
         }
     }
 
-    func createNormalInstance<T: protocol<SentMessageTestClassCreationProtocol, NSObjectProtocol>>(_ type: T.Type = T.self) -> () -> T {
+    func createNormalInstance<T: SentMessageTestClassCreationProtocol & NSObjectProtocol>(_ type: T.Type = T.self) -> () -> T {
         return {
             return T.createInstance()
         }

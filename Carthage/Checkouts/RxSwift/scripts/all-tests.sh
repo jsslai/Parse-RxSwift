@@ -2,6 +2,7 @@
 
 TV_OS=0
 RELEASE_TEST=0
+SKIP_AUTOMATION=0
 
 if [ `xcodebuild -showsdks | grep tvOS | wc -l` -gt 0 ]; then
 	printf "${GREEN}tvOS found${RESET}\n"
@@ -11,6 +12,11 @@ fi
 if [ "$1" == "r" ]; then
 	printf "${GREEN}Pre release tests on, hang on tight ...${RESET}\n"
 	RELEASE_TEST=1
+fi
+
+if [ "$2" == "s" ]; then
+    printf "${RED}Skipping automation tests ...${RESET}\n"
+    SKIP_AUTOMATION=1
 fi
 
 function ensureVersionEqual() {
@@ -29,15 +35,17 @@ function ensureNoGitChanges() {
 
 function checkPlistVersions() {
 	RXSWIFT_VERSION=`cat RxSwift.podspec | grep -E "s.version\s+=" | cut -d '"' -f 2`
-	
+	echo "RxSwift version: ${RXSWIFT_VERSION}"
 	PROJECTS=(RxSwift RxCocoa RxBlocking RxTests)
 	for project in ${PROJECTS[@]}
 	do
 		echo "Checking version for ${project}"
 		PODSPEC_VERSION=`cat $project.podspec | grep -E "s.version\s+=" | cut -d '"' -f 2`
 		ensureVersionEqual "$RXSWIFT_VERSION" "$PODSPEC_VERSION" "${project} version not equal"
-		if [[ `defaults write  "\`pwd\`/${project}/Info.plist" CFBundleShortVersionString $RXSWIFT_VERSION` != $RXSWIFT_VERSION ]]; then
-			defaults write  "`pwd`/${project}/Info.plist" CFBundleShortVersionString $RXSWIFT_VERSION
+        PLIST_VERSION=`defaults read  "\`pwd\`/${project}/Info.plist" CFBundleShortVersionString`
+		if [[ "${PLIST_VERSION}" != "${RXSWIFT_VERSION}" ]]; then
+            echo "Invalid version for `pwd`/${project}/Info.plist: ${PLIST_VERSION}"
+            defaults write  "`pwd`/${project}/Info.plist" CFBundleShortVersionString $RXSWIFT_VERSION
 		fi
 	done
 
@@ -59,12 +67,61 @@ if [ "${RELEASE_TEST}" -eq 1 ]; then
 fi
 
 if [ "${RELEASE_TEST}" -eq 1 ]; then
-  scripts/validate-markdown.sh
-	scripts/validate-podspec.sh
+  	scripts/validate-markdown.sh
 fi
 
+# compile and run playgrounds
+
+. scripts/validate-playgrounds.sh
+
+if [ "${RELEASE_TEST}" -eq 1 ] && [ "${SKIP_AUTOMATION}" -eq 0 ]; then
+#   for configuration in ${CONFIGURATIONS[@]}
+#	do
+#		rx "RxExample-iOSTests" ${configuration} "Krunoslav Zaher’s iPhone" test
+#	done
+
+    for configuration in ${CONFIGURATIONS[@]}
+    do
+        rx "RxExample-iOSUITests" ${configuration} "Krunoslav Zaher’s iPhone" test
+    done
+
+#	for configuration in ${CONFIGURATIONS[@]}
+#	do
+#		rx "RxExample-iOSTests" ${configuration} $DEFAULT_IOS_SIMULATOR test
+#	done
+
+    for configuration in ${CONFIGURATIONS[@]}
+    do
+        rx "RxExample-iOSUITests" ${configuration} $DEFAULT_IOS_SIMULATOR test
+    done
+else
+    for scheme in "RxExample-iOS"
+    do
+        for configuration in "Debug"
+        do
+            rx ${scheme} ${configuration} $DEFAULT_IOS_SIMULATOR build
+        done
+    done
+fi
+
+# make sure osx builds
+for scheme in "RxExample-OSX"
+do
+    for configuration in ${CONFIGURATIONS[@]}
+    do
+        rx ${scheme} ${configuration} "" build
+    done
+done
+
+
+#make sure all OSX tests pass
+for configuration in ${CONFIGURATIONS[@]}
+do
+    rx "RxSwift-OSX" ${configuration} "" test
+done
+
 if [ "${RELEASE_TEST}" -eq 1 ]; then
-	. scripts/automation-tests.sh
+	scripts/validate-podspec.sh
 fi
 
 #make sure all tvOS tests pass
@@ -99,40 +156,3 @@ done
 # 	rx "RxTests-watchOS" ${configuration} $DEFAULT_WATCHOS_SIMULATOR test
 # done
 
-#make sure all OSX tests pass
-for configuration in ${CONFIGURATIONS[@]}
-do
-	rx "RxSwift-OSX" ${configuration} "" test
-done
-
-# make sure with modules can be built
-for scheme in "RxExample-iOS"
-do
-	for configuration in ${CONFIGURATIONS[@]}
-	do
-		rx ${scheme} ${configuration} $DEFAULT_IOS_SIMULATOR build
-	done
-done
-
-for scheme in "RxExample-iOS"
-do
-    for configuration in "Debug"
-    do
-        rx ${scheme} ${configuration} $DEFAULT_IOS_SIMULATOR test
-    done
-done
-
-# make sure osx builds
-for scheme in "RxExample-OSX"
-do
-	for configuration in ${CONFIGURATIONS[@]}
-	do
-		rx ${scheme} ${configuration} "" build
-	done
-done
-
-# compile and run playgrounds
-
-if [ "${IS_SWIFT_3}" -ne 1 ]; then
-	. scripts/validate-playgrounds.sh
-fi

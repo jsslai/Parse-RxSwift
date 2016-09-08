@@ -50,27 +50,27 @@ class SimpleTableViewExampleSectionedViewController
         }
 
         items
-            .bindTo(tableView.rx_itemsWithDataSource(dataSource))
+            .bindTo(tableView.rx.items(dataSource: dataSource))
             .addDisposableTo(disposeBag)
 
-        tableView
-            .rx_itemSelected
+        tableView.rx
+            .itemSelected
             .map { indexPath in
-                return (indexPath, dataSource.itemAtIndexPath(indexPath))
+                return (indexPath, dataSource[indexPath])
             }
-            .subscribeNext { indexPath, model in
+            .subscribe(onNext: { indexPath, model in
                 DefaultWireframe.presentAlert("Tapped `\(model)` @ \(indexPath)")
-            }
+            })
             .addDisposableTo(disposeBag)
 
-        tableView
-            .rx_setDelegate(self)
+        tableView.rx
+            .setDelegate(self)
             .addDisposableTo(disposeBag)
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label = UILabel(frame: CGRect.zero)
-        label.text = dataSource.sectionAtIndex(section).model ?? ""
+        label.text = dataSource.sectionAtIndex(section).model
         return label
     }
 }

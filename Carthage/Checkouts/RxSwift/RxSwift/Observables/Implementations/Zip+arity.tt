@@ -23,7 +23,7 @@ extension Observable {
     */
     // @warn_unused_result(message:"http://git.io/rxs.uo")
     public static func zip<<%= (Array(1...i).map { "O\($0): ObservableType" }).joined(separator: ", ") %>>
-        (<%= (Array(1...i).map { "_ source\($0): O\($0)" }).joined(separator: ", ") %>, resultSelector: (<%= (Array(1...i).map { "O\($0).E" }).joined(separator: ", ") %>) throws -> E)
+        (<%= (Array(1...i).map { "_ source\($0): O\($0)" }).joined(separator: ", ") %>, resultSelector: @escaping (<%= (Array(1...i).map { "O\($0).E" }).joined(separator: ", ") %>) throws -> E)
         -> Observable<E> {
         return Zip<%= i %>(
             <%= (Array(1...i).map { "source\($0): source\($0).asObservable()" }).joined(separator: ", ") %>,
@@ -72,7 +72,7 @@ class ZipSink<%= i %>_<<%= (Array(1...i).map { "E\($0)" }).joined(separator: ", 
 "        subscription\($0).disposable = _parent.source\($0).subscribe(observer\($0))" }).joined(separator: "\n")
 %>
 
-        return CompositeDisposable(disposables: [
+        return Disposables.create([
 <%= (Array(1...i).map { "           subscription\($0)" }).joined(separator: ",\n") %>
         ])
     }
@@ -97,7 +97,7 @@ class Zip<%= i %><<%= (Array(1...i).map { "E\($0)" }).joined(separator: ", ") %>
         _resultSelector = resultSelector
     }
 
-    override func run<O: ObserverType where O.E == R>(_ observer: O) -> Disposable {
+    override func run<O: ObserverType>(_ observer: O) -> Disposable where O.E == R {
         let sink = ZipSink<%= i %>_(parent: self, observer: observer)
         sink.disposable = sink.run()
         return sink
