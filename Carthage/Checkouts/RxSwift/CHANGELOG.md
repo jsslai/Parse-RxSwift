@@ -5,6 +5,66 @@ All notable changes to this project will be documented in this file.
 
 ## Master
 
+## [3.0.0-beta.2](https://github.com/ReactiveX/RxSwift/releases/tag/3.0.0-beta.1) (Xcode 8 / Swift 3.0 compatible)
+
+* Subscription disposables now only create strong references to sinks until being disposed or sequence terminates. #573
+
+* Introduces `SharedSequence` and makes `Driver` just a specialization of `SharedSequence`.
+  That means `Driver` is now just one specific `SharedSequence` and it is now possible to easily create new concepts
+  that have another compile time guarantees in a couple of lines of code.
+  E.g. choosing a background scheduler on which elements are delivered, or choosing `share` as a sharing strategy instead of `shareReplayLatestWhileConnected`.
+
+* Moves `Reactive` struct and `ReactiveCompatible` from `RxCocoa` to `RxSwift` to enable third party consumers to remove `RxCocoa` dependency.
+
+* Add `rx.` extensions on Types.
+
+* Moves `UIImagePickerViewController` and `CLLocationManager` out of `RxCocoa` to `RxExample` project because of App Store submissions issues 
+  on iOS 10.
+
+* Adds `sentMessage` got its equivalent sequence `methodInvoked` that produces elements after method is invoked (vs before method is invoked).
+
+* Deprecates `observe` method on `DelegateProxy` in favor of `sentMessage`.
+* Adds simetric `methodInvoked` method on `DelegateProxy` that enables observing after method is invoked.
+
+* Moves all delegate extensions from using `sentMessage` to using `methodInvoked` (that fixes some problem with editing data sources)
+
+* Fixes problem with `RxTableViewDataSourceProxy` source enabling editing of table view cells (swipe on delete) even if there weren't
+any observers or `forwardToDelegate` wasn't implementing `UITableViewDataSource.tableView(_:commit:forRowAt:)`. #907
+
+* Makes `DelegateProxy` open. #884
+
+* Deprecates extensions that were polluting Swift collection namespaces and moves them to static functions on `Observable`
+    * `Observable.combineLatest`
+    * `Observable.zip`
+    * `Observable.concat`
+    * `Observable.catchError` (sequence version)
+    * `Observable.amb`
+
+* Deprecates extensions that were polluting Swift collection namespaces and moves them to static functions on `Driver`
+    * `Driver.combineLatest`
+    * `Driver.zip`
+    * `Driver.concat`
+    * `Driver.catchError` (sequence version)
+    * `Driver.amb`
+
+* Update Getting Started document, section on creating an observable that performs work to Swift 3.0.
+
+* Removes stale installation instructions. 
+
+## [3.0.0-beta.1](https://github.com/ReactiveX/RxSwift/releases/tag/3.0.0-beta.1) (Xcode 8 GM compatible 8A218a)
+
+* Adapts to new Swift 3.0 syntax.
+* Corrects `throttle` operator behavior to be more consistent with other platforms. Adds `latest` flag that controls should latest element
+  be emitted after dueTime.
+* Adds `delay` operator.
+* Adds `UISearchBar` extensions:
+  * `bookmarkButtonClicked`
+  * `resultsListButtonClicked`
+  * `textDidBeginEditing`
+  * `textDidEndEditing`
+* Moves `CLLocationManager` and `UIImagePickerViewController` extensions from RxCocoa to RxExample project. #874
+* Adds matrix CI builds.
+
 ## [3.0.0.alpha.1](https://github.com/ReactiveX/RxSwift/releases/tag/3.0.0.alpha.1) (Xcode 8 beta 6 compatible 8S201h)
 
 #### Features
@@ -24,11 +84,6 @@ All notable changes to this project will be documented in this file.
 	* Deprecates `BinaryDisposable` in favor of `Disposables.create(_:_:)`
 * Deprecates `toObservable` in favor of `Observable.from()`.
 * Replaces old javascript automation tests with Swift UI Tests.
-* adds `UISearchBar` extensions:
-  * `bookmarkButtonClicked`
-  * `resultsListButtonClicked`
-  * `textDidBeginEditing`
-  * `textDidEndEditing`
 * ...
 
 #### Anomalies
